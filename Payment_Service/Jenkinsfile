@@ -1,3 +1,4 @@
+```groovy
 pipeline {
     agent any
 
@@ -7,27 +8,27 @@ pipeline {
 
     stages {
 
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
-
         stage('Test') {
             steps {
-                sh 'mvn clean test'
+                dir('Payment_Service') {
+                    sh 'mvn clean test'
+                }
             }
         }
 
         stage('Package') {
             steps {
-                sh 'mvn package -DskipTests'
+                dir('Payment_Service') {
+                    sh 'mvn package -DskipTests'
+                }
             }
         }
 
         stage('Docker Build') {
             steps {
-                sh 'docker build -t ${DOCKER_IMAGE} .'
+                dir('Payment_Service') {
+                    sh 'docker build -t ${DOCKER_IMAGE} .'
+                }
             }
         }
 
@@ -46,8 +47,6 @@ pipeline {
                             --password-stdin
 
                         docker push ${DOCKER_IMAGE}
-
-                        docker logout
                     '''
                 }
             }
@@ -56,7 +55,17 @@ pipeline {
 
     post {
         success {
-            echo "Build completed: ${DOCKER_IMAGE}"
+            echo "Build and Docker push completed successfully."
+            echo "Docker Image: ${DOCKER_IMAGE}"
+        }
+
+        failure {
+            echo "Pipeline failed. Please check the stage logs."
+        }
+
+        always {
+            echo "Pipeline completed: ${currentBuild.currentResult}"
         }
     }
 }
+```
