@@ -2,13 +2,12 @@ package sachin.comp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import sachin.comp.dto.request.MposPaymentRequest;
 import sachin.comp.dto.request.MposPaymentResponse;
 import sachin.comp.service.MposPaymentService;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("payment")
@@ -21,4 +20,10 @@ public class PaymentController {
         MposPaymentResponse mposPaymentResponse = mposPaymentService.processPayment(mposPaymentRequest);
         return  ResponseEntity.ok(mposPaymentResponse);
     }
+    @GetMapping("/fetchPayments")
+    public ResponseEntity<Object> fetchPayments() {
+       return  ResponseEntity.ok(Map.of("message", "Test Successfull"));
+    }
+
+
 }
