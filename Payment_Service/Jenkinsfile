@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+     tools {
+            maven 'Maven-1'
+        }
+
     environment {
         DOCKER_IMAGE = "sachincomviva/payment-service:${BUILD_NUMBER}"
     }
